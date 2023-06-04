@@ -106,14 +106,14 @@
 				D2FD32022A250BDD00C5C461 /* Assets.xcassets */,
 				D2FD32042A250BDD00C5C461 /* LaunchScreen.storyboard */,
 				D2FD32072A250BDD00C5C461 /* Info.plist */,
-				D2FD32102A2528B900C5C461 /* LogInViewController.swift */,
-				D25784DC2A28E02D00F48502 /* Router.swift */,
 				D2E318F62A2934D600E26462 /* Accounts */,
 				D2CA3F802A2A7A54001D975C /* Cards */,
-				D2E318F92A2A6EF000E26462 /* Account.swift */,
+				D2FD32102A2528B900C5C461 /* LogInViewController.swift */,
 				D2E318F22A292E0400E26462 /* TabViewController.swift */,
-				D2CA3F7E2A2A74AB001D975C /* MyUseCase.swift */,
 				D268FEB02A2B5AEE00AC546A /* TransactionViewCell.swift */,
+				D25784DC2A28E02D00F48502 /* Router.swift */,
+				D2E318F92A2A6EF000E26462 /* Account.swift */,
+				D2CA3F7E2A2A74AB001D975C /* MyUseCase.swift */,
 			);
 			path = BankingApp;
 			sourceTree = "<group>";

@@ -182,13 +182,52 @@ class LoginViewController: UIViewController {
     @objc func loginButtonPressed(_ sender: UIButton) {
         let s = pinLabel.attributedText?.string
         pinLabel.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
-        if (s! == "1111") {
+        if (checkPin(pin: s!)) {
             coordinator.loginSuccessful()
         } else {
+            animate()
             wrongPinLabel.attributedText = NSMutableAttributedString().normal("Wrong Pin!", fontSize: 18)
             insertPinLabel.textColor = .red
             pinContainerView.layer.borderColor = UIColor.red.cgColor
         }
+    }
+    
+    private func checkPin(pin: String) -> Bool {
+        // For Testing
+        pin == "1111"
+    }
+    
+    private func animate() {
+        let animationDuration = 0.5
+        let shakeOffset: CGFloat = 7
+
+        // Get a reference to the view you want to animate
+        let viewToAnimate = pinContainerView
+
+        // Create the keyframe animation
+        UIView.animateKeyframes(withDuration: animationDuration, delay: 0, options: [], animations: {
+
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.125) {
+                viewToAnimate!.transform = CGAffineTransform(translationX: -shakeOffset, y: 0)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.125, relativeDuration: 0.25) {
+                viewToAnimate!.transform = CGAffineTransform(translationX: shakeOffset, y: 0)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.375, relativeDuration: 0.25) {
+                viewToAnimate!.transform = CGAffineTransform(translationX: -shakeOffset, y: 0)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.625, relativeDuration: 0.25) {
+                viewToAnimate!.transform = CGAffineTransform(translationX: shakeOffset, y: 0)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.875, relativeDuration: 0.125) {
+                viewToAnimate!.transform = .identity
+            }
+
+        }, completion: nil)
     }
 }
 
@@ -213,16 +252,5 @@ extension NSMutableAttributedString {
         self.append(NSAttributedString(string: value, attributes:attributes))
         return self
     }
-    
-    func underlined(_ value:String, fontSize size: CGFloat) -> NSMutableAttributedString {
-        
-        let attributes:[NSAttributedString.Key : Any] = [
-            .font : UIFont(name: "AvenirNext-Bold", size: size) ?? UIFont.systemFont(ofSize: size),
-            .underlineColor : UIColor.black,
-            .underlineStyle : 3
-        ]
-        
-        self.append(NSAttributedString(string: value, attributes:attributes))
-        return self
-    }
+
 }
