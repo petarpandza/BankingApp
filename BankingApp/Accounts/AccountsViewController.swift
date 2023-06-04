@@ -72,14 +72,14 @@ class AccountsViewController: UIViewController {
 extension AccountsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        coordinator.accountDetails(account: Account.Example()[indexPath.row])
+        coordinator.accountDetails(account: Account.example()[indexPath.row])
         
     }
 }
 
 extension AccountsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Account.Example().count
+        Account.example().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -87,7 +87,7 @@ extension AccountsViewController: UICollectionViewDataSource {
             fatalError("Unable to dequeue cell")
         }
 
-        cell.setAccount(account: Account.Example()[indexPath.row])
+        cell.setAccount(account: Account.example()[indexPath.row])
         
         return cell
     }

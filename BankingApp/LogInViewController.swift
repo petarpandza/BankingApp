@@ -4,11 +4,9 @@ import PureLayout
 
 class LoginViewController: UIViewController {
     
-    private var numberButtons: [UIButton]!
-    private var deleteButton: UIButton!
     private var loginButton: UIButton!
     private var pinContainerView: UIView!
-    private var pinLabel: UILabel!
+    private var pinField: UITextField!
     private var insertPinLabel: UILabel!
     private var wrongPinLabel: UILabel!
     
@@ -24,64 +22,24 @@ class LoginViewController: UIViewController {
         
     }
     
-
     private func createViews() {
         
-        numberButtons = [UIButton]()
-        
-        for i in 0...9 {
-            numberButtons.append(UIButton())
-            view.addSubview(numberButtons[i])
-        }
-        
-        deleteButton = UIButton()
         loginButton = UIButton()
         pinContainerView = UIView()
         insertPinLabel = UILabel()
-        pinLabel = UILabel()
+        pinField = UITextField()
         wrongPinLabel = UILabel()
         
-        view.addSubview(deleteButton)
         view.addSubview(loginButton)
         view.addSubview(insertPinLabel)
         view.addSubview(pinContainerView)
-        view.addSubview(pinLabel)
+        view.addSubview(pinField)
         view.addSubview(wrongPinLabel)
         
     }
     
     private func customizeViews() {
         view.backgroundColor = .white
-        
-        for i in 0...9 {
-            numberButtons[i].setTitle(String(i), for: .normal)
-            numberButtons[i].setTitleColor(.black, for: .normal)
-            numberButtons[i].tag = i
-            numberButtons[i].layer.cornerRadius = 5
-            numberButtons[i].layer.shadowColor = UIColor.gray.cgColor
-            numberButtons[i].layer.shadowOffset = CGSize(width: 0, height: 1.0)
-            numberButtons[i].layer.shadowRadius = 3.0
-            numberButtons[i].layer.shadowOpacity = 1
-            numberButtons[i].layer.masksToBounds = false
-            numberButtons[i].layer.borderColor = UIColor.black.cgColor
-            numberButtons[i].layer.borderWidth = 1
-            
-            numberButtons[i].addTarget(self, action: #selector(pinButtonPressed(_:)), for: .touchUpInside)
-        }
-        
-        let deleteImage = UIImage(systemName: "delete.left", withConfiguration: .none)
-        deleteButton.setImage(deleteImage, for: .normal)
-        deleteButton.tintColor = .black
-        deleteButton.layer.cornerRadius = 5
-        deleteButton.layer.shadowColor = UIColor.gray.cgColor
-        deleteButton.layer.shadowOffset = CGSize(width: 0, height: 1.0)
-        deleteButton.layer.shadowRadius = 3.0
-        deleteButton.layer.shadowOpacity = 1
-        deleteButton.layer.masksToBounds = false
-        deleteButton.layer.borderColor = UIColor.black.cgColor
-        deleteButton.layer.borderWidth = 1
-        
-        deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
         
         loginButton.setAttributedTitle(NSMutableAttributedString().bold("Log In", fontSize: 24), for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
@@ -93,8 +51,12 @@ class LoginViewController: UIViewController {
         insertPinLabel.attributedText = NSMutableAttributedString().normal("Insert pin", fontSize: 18)
         insertPinLabel.textColor = .black
         
-        pinLabel.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
-        pinLabel.textColor = .black
+        pinField.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
+        pinField.textColor = .black
+        pinField.delegate = self
+        pinField.keyboardType = .numberPad
+        pinField.isSecureTextEntry = true
+        pinField.becomeFirstResponder()
         
         pinContainerView.layer.borderColor = UIColor.black.cgColor
         pinContainerView.layer.borderWidth = 1
@@ -106,43 +68,10 @@ class LoginViewController: UIViewController {
     
     private func defineViewLayout() {
         
-        let buttonWidth = view.frame.width / 3 - 5
-        let buttonHeight = buttonWidth / 3
-        for i in 0...9 {
-            numberButtons[i].autoSetDimension(.width, toSize: buttonWidth)
-            numberButtons[i].autoSetDimension(.height, toSize: buttonHeight)
-        }
-        numberButtons[0].autoPinEdge(toSuperviewSafeArea: .bottom, withInset: 4)
-        numberButtons[0].autoAlignAxis(toSuperviewAxis: .vertical)
-        
-        numberButtons[8].autoPinEdge(.bottom, to: .top, of: numberButtons[0], withOffset: -4)
-        numberButtons[8].autoPinEdge(.leading, to: .leading, of: numberButtons[0])
-        numberButtons[5].autoPinEdge(.bottom, to: .top, of: numberButtons[8], withOffset: -4)
-        numberButtons[5].autoPinEdge(.leading, to: .leading, of: numberButtons[0])
-        numberButtons[2].autoPinEdge(.bottom, to: .top, of: numberButtons[5], withOffset: -4)
-        numberButtons[2].autoPinEdge(.leading, to: .leading, of: numberButtons[0])
-        numberButtons[1].autoPinEdge(.trailing, to: .leading, of: numberButtons[2], withOffset: -4)
-        numberButtons[1].autoPinEdge(.top, to: .top, of: numberButtons[2])
-        numberButtons[3].autoPinEdge(.leading, to: .trailing, of: numberButtons[2], withOffset: 4)
-        numberButtons[3].autoPinEdge(.top, to: .top, of: numberButtons[2])
-        numberButtons[4].autoPinEdge(.trailing, to: .leading, of: numberButtons[2], withOffset: -4)
-        numberButtons[4].autoPinEdge(.top, to: .top, of: numberButtons[5])
-        numberButtons[6].autoPinEdge(.leading, to: .trailing, of: numberButtons[2], withOffset: 4)
-        numberButtons[6].autoPinEdge(.top, to: .top, of: numberButtons[5])
-        numberButtons[7].autoPinEdge(.trailing, to: .leading, of: numberButtons[2], withOffset: -4)
-        numberButtons[7].autoPinEdge(.top, to: .top, of: numberButtons[8])
-        numberButtons[9].autoPinEdge(.leading, to: .trailing, of: numberButtons[2], withOffset: 4)
-        numberButtons[9].autoPinEdge(.top, to: .top, of: numberButtons[8])
-        
-        deleteButton.autoSetDimension(.width, toSize: buttonWidth)
-        deleteButton.autoSetDimension(.height, toSize: buttonHeight)
-        deleteButton.autoPinEdge(.bottom, to: .top, of: numberButtons[3], withOffset: -4)
-        deleteButton.autoPinEdge(.leading, to: .leading, of: numberButtons[3])
-        
         loginButton.autoSetDimension(.width, toSize: view.frame.width/2)
         loginButton.autoSetDimension(.height, toSize: view.frame.width/10)
         loginButton.autoAlignAxis(toSuperviewAxis: .vertical)
-        loginButton.autoPinEdge(.top, to: .bottom, of: pinLabel, withOffset: 50)
+        loginButton.autoPinEdge(.top, to: .bottom, of: pinField, withOffset: 50)
         
         insertPinLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 10)
         insertPinLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 10)
@@ -154,34 +83,19 @@ class LoginViewController: UIViewController {
         pinContainerView.autoPinEdge(.top, to: .bottom, of: insertPinLabel, withOffset: 10)
         pinContainerView.autoSetDimension(.height, toSize: 40)
         
-        pinLabel.autoPinEdge(.top, to: .top, of: pinContainerView)
-        pinLabel.autoPinEdge(.bottom, to: .bottom, of: pinContainerView)
-        pinLabel.autoPinEdge(.leading, to: .leading, of: pinContainerView, withOffset: 10)
-        pinLabel.autoPinEdge(.trailing, to: .trailing, of: pinContainerView, withOffset: 10)
+        pinField.autoPinEdge(.top, to: .top, of: pinContainerView)
+        pinField.autoPinEdge(.bottom, to: .bottom, of: pinContainerView)
+        pinField.autoPinEdge(.leading, to: .leading, of: pinContainerView, withOffset: 10)
+        pinField.autoPinEdge(.trailing, to: .trailing, of: pinContainerView, withOffset: 10)
         
         wrongPinLabel.autoPinEdge(.top, to: .bottom, of: pinContainerView, withOffset: 10)
         wrongPinLabel.autoPinEdge(.leading, to: .leading, of: pinContainerView)
         wrongPinLabel.autoPinEdge(.trailing, to: .trailing, of: pinContainerView)
     }
     
-    @objc func pinButtonPressed(_ sender: UIButton) {
-        var s = pinLabel.attributedText?.string
-        s!.append(String(sender.tag))
-        pinLabel.attributedText = NSMutableAttributedString().normal(s!, fontSize: 18)
-        wrongPinLabel.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
-        insertPinLabel.textColor = .black
-        pinContainerView.layer.borderColor = UIColor.black.cgColor
-    }
-    
-    @objc func deleteButtonPressed(_ sender: UIButton) {
-        var s = pinLabel.attributedText?.string
-        s = String(s!.dropLast(1))
-        pinLabel.attributedText = NSMutableAttributedString().normal(s!, fontSize: 18)
-    }
-    
     @objc func loginButtonPressed(_ sender: UIButton) {
-        let s = pinLabel.attributedText?.string
-        pinLabel.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
+        let s = pinField.attributedText?.string
+        pinField.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
         if (checkPin(pin: s!)) {
             coordinator.loginSuccessful()
         } else {
@@ -200,17 +114,17 @@ class LoginViewController: UIViewController {
     private func animate() {
         let animationDuration = 0.5
         let shakeOffset: CGFloat = 7
-
+        
         // Get a reference to the view you want to animate
         let viewToAnimate = pinContainerView
-
+        
         // Create the keyframe animation
         UIView.animateKeyframes(withDuration: animationDuration, delay: 0, options: [], animations: {
-
+            
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.125) {
                 viewToAnimate!.transform = CGAffineTransform(translationX: -shakeOffset, y: 0)
             }
-
+            
             UIView.addKeyframe(withRelativeStartTime: 0.125, relativeDuration: 0.25) {
                 viewToAnimate!.transform = CGAffineTransform(translationX: shakeOffset, y: 0)
             }
@@ -222,12 +136,25 @@ class LoginViewController: UIViewController {
             UIView.addKeyframe(withRelativeStartTime: 0.625, relativeDuration: 0.25) {
                 viewToAnimate!.transform = CGAffineTransform(translationX: shakeOffset, y: 0)
             }
-
+            
             UIView.addKeyframe(withRelativeStartTime: 0.875, relativeDuration: 0.125) {
                 viewToAnimate!.transform = .identity
             }
-
+            
         }, completion: nil)
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    internal func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        pinContainerView.layer.borderColor = UIColor.black.cgColor
+        insertPinLabel.textColor = .black
+        wrongPinLabel.attributedText = NSMutableAttributedString().normal("", fontSize: 18)
+        
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
     }
 }
 
@@ -252,5 +179,5 @@ extension NSMutableAttributedString {
         self.append(NSAttributedString(string: value, attributes:attributes))
         return self
     }
-
+    
 }

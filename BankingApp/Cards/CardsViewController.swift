@@ -74,7 +74,7 @@ extension CardsViewController: UICollectionViewDelegate {
         var card: Card?
         var index = indexPath.row
         
-        for account in Account.Example() {
+        for account in Account.example() {
             if (account.cards.count < index) {
                 index -= account.cards.count
             } else {
@@ -94,7 +94,7 @@ extension CardsViewController: UICollectionViewDelegate {
 extension CardsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var count = 0
-        for account in Account.Example() {
+        for account in Account.example() {
             count += account.cards.count
         }
         return count
@@ -108,7 +108,7 @@ extension CardsViewController: UICollectionViewDataSource {
         var index = indexPath.row
         var card: Card?
         
-        for account in Account.Example() {
+        for account in Account.example() {
             if (account.cards.count < index) {
                 index -= account.cards.count
             } else {
